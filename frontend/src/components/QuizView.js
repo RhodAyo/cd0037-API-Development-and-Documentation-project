@@ -28,14 +28,19 @@ class QuizView extends Component {
         return;
       },
       error: (error) => {
-        alert('Unable to load categories. Please try your request again');
+        alert(
+          'Unable to load categories. Please try your request again'
+        );
         return;
       },
     });
   }
 
   selectCategory = ({ type, id = 0 }) => {
-    this.setState({ quizCategory: { type, id } }, this.getNextQuestion);
+    this.setState(
+      { quizCategory: { type, id } },
+      this.getNextQuestion
+    );
   };
 
   handleChange = (event) => {
@@ -55,7 +60,7 @@ class QuizView extends Component {
       contentType: 'application/json',
       data: JSON.stringify({
         previous_questions: previousQuestions,
-        quiz_category: this.state.quizCategory,
+        quiz_category: this.state.quizCategory.id,
       }),
       xhrFields: {
         withCredentials: true,
@@ -72,7 +77,9 @@ class QuizView extends Component {
         return;
       },
       error: (error) => {
-        alert('Unable to load question. Please try your request again');
+        alert(
+          'Unable to load question. Please try your request again'
+        );
         return;
       },
     });
@@ -82,7 +89,9 @@ class QuizView extends Component {
     event.preventDefault();
     let evaluate = this.evaluateAnswer();
     this.setState({
-      numCorrect: !evaluate ? this.state.numCorrect : this.state.numCorrect + 1,
+      numCorrect: !evaluate
+        ? this.state.numCorrect
+        : this.state.numCorrect + 1,
       showAnswer: true,
     });
   };
@@ -104,7 +113,10 @@ class QuizView extends Component {
       <div className='quiz-play-holder'>
         <div className='choose-header'>Choose Category</div>
         <div className='category-holder'>
-          <div className='play-category' onClick={this.selectCategory}>
+          <div
+            className='play-category'
+            onClick={this.selectCategory}
+          >
             ALL
           </div>
           {Object.keys(this.state.categories).map((id) => {
@@ -114,7 +126,10 @@ class QuizView extends Component {
                 value={id}
                 className='play-category'
                 onClick={() =>
-                  this.selectCategory({ type: this.state.categories[id], id })
+                  this.selectCategory({
+                    type: this.state.categories[id],
+                    id,
+                  })
                 }
               >
                 {this.state.categories[id]}
@@ -160,8 +175,13 @@ class QuizView extends Component {
         <div className={`${evaluate ? 'correct' : 'wrong'}`}>
           {evaluate ? 'You were correct!' : 'You were incorrect'}
         </div>
-        <div className='quiz-answer'>{this.state.currentQuestion.answer}</div>
-        <div className='next-question button' onClick={this.getNextQuestion}>
+        <div className='quiz-answer'>
+          {this.state.currentQuestion.answer}
+        </div>
+        <div
+          className='next-question button'
+          onClick={this.getNextQuestion}
+        >
           {' '}
           Next Question{' '}
         </div>
@@ -181,7 +201,11 @@ class QuizView extends Component {
           {this.state.currentQuestion.question}
         </div>
         <form onSubmit={this.submitGuess}>
-          <input type='text' name='guess' onChange={this.handleChange} />
+          <input
+            type='text'
+            name='guess'
+            onChange={this.handleChange}
+          />
           <input
             className='submit-guess button'
             type='submit'
@@ -193,7 +217,9 @@ class QuizView extends Component {
   }
 
   render() {
-    return this.state.quizCategory ? this.renderPlay() : this.renderPrePlay();
+    return this.state.quizCategory
+      ? this.renderPlay()
+      : this.renderPrePlay();
   }
 }
 
